@@ -1,11 +1,33 @@
-async function getRandomDogs() {
-  let url = 'https://dog.ceo/api/breeds/image/random'
+async function getImages() {
+  const baseUrl = 'https://api.github.com'
+  const userName = 'matheusteodoro01'
+  const acessToken= 'Bearer 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'
+  const repoImages = 'photos' 
+  const repoPath = '/images'
+  const path = 'repos'
+  const url =  `${baseUrl}/${path}/${userName}/${repoImages}/contents${repoPath}`
   try {
-    let res = await fetch(url)
+    const res = await fetch(url,{
+      headers: {
+        'Authorization': acessToken
+      },
+    })
     return await res.json()
   } catch (error) {
     console.log(error)
   }
+}
+
+
+function getRadomImage(imagesPath) {
+  const baseUrl = 'https://github.com'
+  const userName = 'matheusteodoro01'
+  const repoImages = 'photos' 
+  const repoPath = 'images'
+  const imagesSrc = imagesPath?.map(image=>{
+    return `${baseUrl}/${userName}/${repoImages}/blob/master/${image.path}?raw=true`
+  })
+  return imagesSrc
 }
 
 
@@ -14,15 +36,15 @@ const button = document.querySelector('button')
 const p = document.querySelector('p')
 
 async function renderDogs() {
-  let dogs = './images/1.jpg'
-  var dog = []
-  dog = new Image()
-  dog.src = dogs
-  dog.width = '600'
-  dog.height = '500'
-  var images = document.getElementById('img')
-  document.body.appendChild(dog)
-  console.log(dog)
+  const images = await getImages()
+  const paths = getRadomImage(images)
+  var image = []
+  image = new Image()
+ image.src = paths[0]
+  image.width = '600'
+  image.height = '500'
+  document.getElementById('img')
+  document.body.appendChild(image)
 }
 
 var count = 0
